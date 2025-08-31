@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Workout Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo" id="homeLogo">
+                <i class="fas fa-dumbbell"></i>
+                <span>TAMRINK</span>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+                <span>Dark Mode</span>
+            </button>
+        </header>
+
+        <main>
+            <!-- Home Page -->
+            <div class="page active" id="homePage">
+                <div class="split-tabs">
+                    <div class="split-tab ppl-split active" data-split="ppl">
+                        <i class="fas fa-hands"></i>
+                        <h2>Push/Pull/Legs</h2>
+                        <p>Chest, Back, Legs & More</p>
+                    </div>
+                    <div class="split-tab arnold-split" data-split="arnold">
+                        <i class="fas fa-dumbbell"></i>
+                        <h2>Arnold Split</h2>
+                        <p>Chest & Back, Shoulders & Arms, Legs</p>
+                    </div>
+                    <div class="split-tab upperlower-split" data-split="upperlower">
+                        <i class="fas fa-user"></i>
+                        <h2>Upper/Lower</h2>
+                        <p>Upper Body, Lower Body</p>
+                    </div>
+                </div>
+
+                <div class="progress-chart">
+                    <h3>Overall Progress Overview</h3>
+                    <canvas id="overallProgressChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Push/Pull/Legs Section -->
+            <div class="page" id="ppl-page">
+                <div class="section-header">
+                    <div>
+                        <button class="back-btn" id="pplBackBtn">
+                            <i class="fas fa-arrow-left"></i>
+                            Back
+                        </button>
+                        <h2>Push/Pull/Legs Routine</h2>
+                    </div>
+                    <button class="btn" id="addPPLExerciseBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Exercise
+                    </button>
+                </div>
+
+                <div class="day-tabs">
+                    <div class="day-tab active" data-day="push">Push Day</div>
+                    <div class="day-tab" data-day="pull">Pull Day</div>
+                    <div class="day-tab" data-day="legs">Legs Day</div>
+                </div>
+
+                <div class="exercises-grid" id="pplExercisesContainer">
+                    <!-- PPL Exercises will be dynamically inserted here -->
+                </div>
+
+                <div class="progress-chart">
+                    <h3>Progress Overview - Push/Pull/Legs</h3>
+                    <canvas id="pplProgressChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Arnold Split Section -->
+            <div class="page" id="arnold-page">
+                <div class="section-header">
+                    <div>
+                        <button class="back-btn" id="arnoldBackBtn">
+                            <i class="fas fa-arrow-left"></i>
+                            Back
+                        </button>
+                        <h2>Arnold Split Routine</h2>
+                    </div>
+                    <button class="btn" id="addArnoldExerciseBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Exercise
+                    </button>
+                </div>
+
+                <div class="day-tabs">
+                    <div class="day-tab active" data-day="chest-back">Chest & Back</div>
+                    <div class="day-tab" data-day="shoulders-arms">Shoulders & Arms</div>
+                    <div class="day-tab" data-day="legs">Legs</div>
+                </div>
+
+                <div class="exercises-grid" id="arnoldExercisesContainer">
+                    <!-- Arnold Exercises will be dynamically inserted here -->
+                </div>
+
+                <div class="progress-chart">
+                    <h3>Progress Overview - Arnold Split</h3>
+                    <canvas id="arnoldProgressChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Upper/Lower Split Section -->
+            <div class="page" id="upperlower-page">
+                <div class="section-header">
+                    <div>
+                        <button class="back-btn" id="upperlowerBackBtn">
+                            <i class="fas fa-arrow-left"></i>
+                            Back
+                        </button>
+                        <h2>Upper/Lower Routine</h2>
+                    </div>
+                    <button class="btn" id="addUpperLowerExerciseBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Exercise
+                    </button>
+                </div>
+
+                <div class="day-tabs">
+                    <div class="day-tab active" data-day="upper">Upper Body</div>
+                    <div class="day-tab" data-day="lower">Lower Body</div>
+                </div>
+
+                <div class="exercises-grid" id="upperlowerExercisesContainer">
+                    <!-- Upper/Lower Exercises will be dynamically inserted here -->
+                </div>
+
+                <div class="progress-chart">
+                    <h3>Progress Overview - Upper/Lower Split</h3>
+                    <canvas id="upperlowerProgressChart"></canvas>
+                </div>
+            </div>
+        </main>
+
+       <footer>
+    <p>
+        Gym Progress Tracker | Developed by 
+        <a href="https://portfolio-six-puce-81.vercel.app/" target="_blank" style="color: white; text-decoration: none;">
+            Abdelkader Mohamed
+        </a>
+    </p>
+</footer>
+    </div>
+
+    <!-- Add/Edit Exercise Modal -->
+    <div class="modal" id="exerciseModal">
+        <div class="modal-content">
+            <h2 id="modalTitle"><i class="fas fa-dumbbell"></i> Add New Exercise</h2>
+            <form id="exerciseForm">
+                <input type="hidden" id="exerciseSplit">
+                <input type="hidden" id="exerciseDay">
+                <input type="hidden" id="exerciseId">
+                
+                <div class="form-group">
+                    <label for="exerciseName"><i class="fas fa-pen"></i> Exercise Name</label>
+                    <input type="text" id="exerciseName" required placeholder="Enter exercise name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="exerciseCategory"><i class="fas fa-tag"></i> Category</label>
+                    <select id="exerciseCategory" required>
+                        <option value="push">Push</option>
+                        <option value="pull">Pull</option>
+                        <option value="legs">Legs</option>
+                        <option value="chest-back">Chest & Back</option>
+                        <option value="shoulders-arms">Shoulders & Arms</option>
+                        <option value="upper">Upper Body</option>
+                        <option value="lower">Lower Body</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="exerciseWeight"><i class="fas fa-weight-hanging"></i> Current Weight (kg)</label>
+                    <div class="weight-input-container">
+                        <span class="weight-unit">kg</span>
+                        <input type="number" id="exerciseWeight" min="0" step="0.5" required placeholder="Enter weight in kg">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="exerciseImage"><i class="fas fa-image"></i> Exercise Image</label>
+                    <div class="image-upload-container" id="imageUploadContainer">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload or drag and drop</p>
+                        <span>PNG, JPG, GIF up to 5MB</span>
+                    </div>
+                    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                    <input type="text" id="imageUrl" placeholder="Or enter image URL" style="display: none;">
+                </div>
+                
+                <div class="image-preview" id="imagePreview">
+                    <img src="" alt="Image Preview">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="back-btn" id="cancelBtn">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> Save Exercise
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Weight History Modal -->
+    <div class="modal" id="historyModal">
+        <div class="modal-content">
+            <h2 id="historyTitle"><i class="fas fa-history"></i> Weight History</h2>
+            <div id="historyContent">
+                <!-- History items will be inserted here -->
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn" id="closeHistoryBtn">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal (Updated for Weight Update) -->
+    <div class="confirmation-modal" id="confirmationModal">
+        <div class="confirmation-content">
+            <h3 id="confirmationTitle"><i class="fas fa-weight"></i> Update Weight</h3>
+            <div id="confirmationMessage">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+            <div class="confirmation-buttons">
+                <button class="back-btn" id="confirmCancelBtn">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn" id="confirmActionBtn">
+                    <i class="fas fa-check"></i> Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Notification -->
+    <div class="popup" id="popupNotification">
+        <i class="fas fa-check-circle"></i>
+        <span id="popupMessage">Operation completed successfully</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
