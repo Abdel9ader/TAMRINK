@@ -1,5 +1,6 @@
-       /*===============> Data storage and initialization </*>===============*/
-        let exercises = JSON.parse(localStorage.getItem('exercises')) || [];
+
+    /*===============> Data storage and initialization </*>===============*/
+        let exercises = [];
         let currentSplit = 'ppl';
         let currentDay = 'push';
         let editingExerciseId = null;
@@ -41,11 +42,34 @@
 
         /*===============> Initialize the application <===============*/
         function init() {
-        /*===============> Load theme preference <===============*/
+            /*===============> Load theme preference <===============*/
             const darkMode = localStorage.getItem('darkMode') === 'true';
             if (darkMode) {
                 document.body.classList.add('dark-mode');
                 updateThemeToggle();
+            }
+            
+            // Load exercises from localStorage
+            loadExercises();
+            
+            // Animate split tabs
+            animateSplitTabs();
+            renderHomePage();
+            setupEventListeners();
+            updateOverallChart();
+        }
+
+        // Load exercises from localStorage
+        function loadExercises() {
+            const storedExercises = localStorage.getItem('exercises');
+            
+            if (storedExercises) {
+                try {
+                    exercises = JSON.parse(storedExercises);
+                } catch (e) {
+                    console.error('Error parsing exercises from localStorage:', e);
+                    exercises = [];
+                }
             }
             
             // Add sample data if none exists
@@ -86,7 +110,7 @@
                         split: 'ppl',
                         day: 'pull',
                         currentWeight: 120,
-                        image: 'https://images.unsplash.com/photo-1634224143532-6347d4fad4c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGRlYWRliWZ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
+                        image: 'https://images.unsplash.com/photo-1634224143532-6347d4fad4c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGRlYWRsaWZ0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
                         history: [
                             { date: '2023-08-03', weight: 110 },
                             { date: '2023-08-10', weight: 115 },
@@ -149,14 +173,18 @@
                         lastUpdated: '2023-08-14'
                     }
                 ];
-                localStorage.setItem('exercises', JSON.stringify(exercises));
+                saveExercises();
             }
-            
-            // Animate split tabs
-            animateSplitTabs();
-            renderHomePage();
-            setupEventListeners();
-            updateOverallChart();
+        }
+
+        // Save exercises to localStorage
+        function saveExercises() {
+            try {
+                localStorage.setItem('exercises', JSON.stringify(exercises));
+            } catch (e) {
+                console.error('Error saving exercises to localStorage:', e);
+                showPopup('Error saving data. Please try again.', 'error');
+            }
         }
 
         // Animate split tabs with staggered animation
@@ -491,6 +519,7 @@
                         image,
                         currentWeight: weight
                     };
+                    saveExercises();
                     showPopup('Exercise updated successfully', 'success');
                 }
             } else {
@@ -507,11 +536,11 @@
                 };
                 
                 exercises.push(newExercise);
+                saveExercises();
                 showPopup('Exercise added successfully', 'success');
             }
             
-            // Save to localStorage and update UI
-            localStorage.setItem('exercises', JSON.stringify(exercises));
+            // Update UI
             closeModal(exerciseModal);
             renderExercises();
             updateSplitChart();
@@ -571,7 +600,7 @@
             
             if (pendingAction.type === 'delete') {
                 exercises = exercises.filter(ex => ex.id !== pendingAction.id);
-                localStorage.setItem('exercises', JSON.stringify(exercises));
+                saveExercises();
                 renderExercises();
                 updateSplitChart();
                 updateOverallChart();
@@ -601,7 +630,7 @@
                         exercise.history = exercise.history.slice(0, 10);
                     }
                     
-                    localStorage.setItem('exercises', JSON.stringify(exercises));
+                    saveExercises();
                     renderExercises();
                     updateSplitChart();
                     updateOverallChart();
