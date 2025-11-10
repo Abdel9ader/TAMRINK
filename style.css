@@ -606,7 +606,46 @@
             gap: 15px;
             margin-top: 20px;
         }
+        /* Visitor Counter Styles */
+        .visitor-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-color);
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            z-index: 100;
+            transition: var(--transition);
+            animation: fadeInUp 0.5s ease-out;
+        }
 
+        .visitor-counter:hover {
+            transform: var(--hover-transform);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .visitor-counter i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .visitor-counter .count {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -688,4 +727,13 @@
             .form-actions {
                 flex-direction: column;
             }
+
         }
+        @media (max-width: 768px) {
+                        .visitor-counter {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                justify-content: center;
+            }}
+
