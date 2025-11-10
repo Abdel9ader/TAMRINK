@@ -30,6 +30,9 @@
         const popupMessage = document.getElementById('popupMessage');
         const exerciseNameLabel = document.getElementById('exerciseNameLabel');
         const newWeightInput = document.getElementById('newWeightInput');
+        const visitorCounter = document.getElementById('visitorCounter');
+        const visitorCount = document.getElementById('visitorCount');
+
 
         /*===============> Page navigation elements <===============*/
         const pages = document.querySelectorAll('.page');
@@ -51,6 +54,8 @@
             
             // Load exercises from localStorage
             loadExercises();
+            // Initialize visitor counter
+            updateVisitorCounter();
             
             // Animate split tabs
             animateSplitTabs();
@@ -58,7 +63,19 @@
             setupEventListeners();
             updateOverallChart();
         }
-
+        // Update visitor counter
+        function updateVisitorCounter() {
+            let visitors = parseInt(localStorage.getItem('visitorCount')) || 0;
+            visitors++;
+            localStorage.setItem('visitorCount', visitors.toString());
+            visitorCount.textContent = visitors;
+            
+            // Animate the counter
+            visitorCounter.style.animation = 'pulse 0.5s';
+            setTimeout(() => {
+                visitorCounter.style.animation = '';
+            }, 500);
+        }
         // Load exercises from localStorage
         function loadExercises() {
             const storedExercises = localStorage.getItem('exercises');
@@ -887,3 +904,4 @@
 
         /*===============>Initialize the app when the DOM is loaded<===============*/
         document.addEventListener('DOMContentLoaded', init);
+
